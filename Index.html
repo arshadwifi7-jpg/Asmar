@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ASMAR WIFI</title>
+  <script src="https://js.stripe.com/v3/"></script>
+  <style>
+    body { 
+      font-family: Arial; 
+      background: #0a0a0a; 
+      color: #fff; 
+      text-align: center;
+      padding: 50px;
+    }
+    .plan { 
+      background: #1a1a1a; 
+      border: 2px solid #d4af37;
+      border-radius: 20px;
+      padding: 30px;
+      margin: 20px auto;
+      max-width: 400px;
+      cursor: pointer;
+    }
+    button {
+      background: #d4af37;
+      color: #000;
+      border: none;
+      padding: 15px 40px;
+      border-radius: 30px;
+      font-size: 1.1rem;
+      cursor: pointer;
+    }
+    h1 { color: #d4af37; }
+    .price { font-size: 3rem; color: #d4af37; }
+  </style>
+</head>
+<body>
+  <h1>ASMAR WIFI</h1>
+  
+  <div class="plan" onclick="pay(500)">
+    <h2>Daily Pass</h2>
+    <div class="price">5 AED</div>
+  </div>
+  
+  <div class="plan" onclick="pay(3000)">
+    <h2>Monthly Pass</h2>
+    <div class="price">30 AED</div>
+  </div>
+
+  <script>
+    const stripe = Stripe('pk_test_YOUR_KEY');
+    
+    async function pay(amount) {
+      const res = await fetch('/api/pay', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({amount})
+      });
+      const {id} = await res.json();
+      stripe.redirectToCheckout({sessionId: id});
+    }
+  </script>
+</body>
+</html>
